@@ -16,6 +16,7 @@ const zeroPaddedNumber = (num) => {
 };
 
 const readCounter = (callback) => {
+  debugger;
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
       callback(null, 0);
@@ -39,8 +40,18 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+  readCounter((err, data) => {
+    if (err) {
+      return err;
+    }
+    data = data + 1;
+    writeCounter(data, (err, data) => {
+      if (err) {
+        return err;
+      }
+      return data;
+    });
+  });
 };
 
 
